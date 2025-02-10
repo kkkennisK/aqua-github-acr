@@ -8,14 +8,21 @@ resources:
 #   tag: '$(Build.BuildId)'
 
 stages:
+
 - stage: Build
   displayName: Build, Scan, Push Image
+
   jobs:
   - job: Build
     displayName: Build, Scan, Push Image
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: CmdLine@2
+      displayName: 'Show ACR Registry'
+      inputs:
+        script: 'echo "ACR Registry: $(acr_registry)"'
+  
     - task: Docker@2
       displayName: Build Image
       inputs:
@@ -23,6 +30,19 @@ stages:
         repository: $(ACR_REGISTRY)/poc-demo
         tags: latest
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
+        arguments: |
+          --label com.azure.dev.image.system.teamfoundationcollectionuri=https://dev.azure.com/cloudadmin0193/
+          --label com.azure.dev.image.system.teamproject=aqua-devops-poc
+          --label com.azure.dev.image.build.repository.name=kkkennisK/aqua-github-acr
+          --label com.azure.dev.image.build.sourceversion=25947c51f7e653db006d8741aaa7c2ae1598cb1f
+          --label com.azure.dev.image.build.repository.uri=https://github.com/kkkennisK/aqua-github-acr
+          --label com.azure.dev.image.build.sourcebranchname=poc
+          --label com.azure.dev.image.build.definitionname=kkkennisK.aqua-github-acr
+          --label com.azure.dev.image.build.buildnumber=20250210.10
+          --label com.azure.dev.image.build.builduri=vstfs:///Build/Build/196
+          --label image.base.ref.name=python:3.8-slim-buster
+          --label image.base.digest=sha256:8799b0564103a9f36cfb8a8e1c562e11a9a6f2e3bb214e2adc23982b36a04511
     - task: CmdLine@2
       displayName: Pull Aqua Scanner Image
       inputs: 
