@@ -21,7 +21,7 @@ stages:
       inputs:
         command: build
         repository: $(ACR_REGISTRY)/devops-poc-1
-        # tags: $(Build.BuildId)
+        tags: $(Build.BuildId)
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     - task: CmdLine@2
       displayName: Pull Aqua Scanner Image
