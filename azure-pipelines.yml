@@ -46,5 +46,5 @@ stages:
       inputs: 
         script: |-
           docker login -u $(ACR_USERNAME) -p $(ACR_PASSWORD) $(ACR_URL)
-          docker push $(ACR_REGISTRY)/jenkins-demo-2:$(Build.BuildId)
+          docker push $(ACR_REGISTRY)/devops-poc-1:$(Build.BuildId)
 
