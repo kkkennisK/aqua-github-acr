@@ -1,5 +1,5 @@
 trigger:
-- master
+- poc
 
 resources:
 - repo: self
@@ -21,7 +21,9 @@ stages:
       inputs:
         command: build
         repository: $(ACR_REGISTRY)/poc-demo
-        tags: $(Build.BuildId)
+        tags: |
+              latest
+              $(Build.BuildId)
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     - task: CmdLine@2
       displayName: Pull Aqua Scanner Image
