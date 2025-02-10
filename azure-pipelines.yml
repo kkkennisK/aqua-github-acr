@@ -1,5 +1,5 @@
 trigger:
-- main
+- master
 
 resources:
 - repo: self
@@ -20,9 +20,8 @@ stages:
       displayName: Build Image
       inputs:
         command: build
-        repository: $(ACR_REGISTRY)/devops-poc-1
-        tags: |
-          $(Build.BuildId), latest
+        repository: $(ACR_REGISTRY)/poc-demo
+        tags: $(Build.BuildId)
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     - task: CmdLine@2
       displayName: Pull Aqua Scanner Image
@@ -34,7 +33,7 @@ stages:
     - task: aquasecScanner@4
       displayName: Aqua Image Scanner
       inputs:
-        image: $(ACR_REGISTRY)/devops-poc-1:$(Build.BuildId)
+        image: $(ACR_REGISTRY)/poc-demo:$(Build.BuildId)
         register: false
         hideBase: false
         showNegligible: false
@@ -46,6 +45,5 @@ stages:
       displayName: Push Image to ACR
       inputs: 
         script: |-
-          docker login -u $(ACR_USERNAME) -p $(ACR_PASSWORD) $(ACR_URL)
-          docker push $(ACR_REGISTRY)/devops-poc-1:$(Build.BuildId)
-
+          docker login -u systexacr -p $(ACR_PASSWORD) systexacr.azurecr.io
+          docker push $(ACR_REGISTRY)/poc-demo:$(Build.BuildId)
